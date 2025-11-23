@@ -1,7 +1,6 @@
-from app import db
+from app import db, bcrypt
 from sqlalchemy import DateTime, func
 from flask_login import UserMixin
-from flask_bcrypt import Bcrypt
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -11,10 +10,10 @@ class User(db.Model, UserMixin):
 
     # store passwords securely
     def set_password(self, raw_password):
-        self.password = Bcrypt.generate_password_hash(raw_password).decode('utf-8')
+        self.password = bcrypt.generate_password_hash(raw_password).decode('utf-8')
 
     def check_password(self, raw_password):
-        return Bcrypt.check_password_hash(self.password, raw_password)
+        return bcrypt.check_password_hash(self.password, raw_password)
 
     #optional info
     dob = db.Column(db.Date, nullable=True)

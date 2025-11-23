@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_bcrypt import Bcrypt
 from config import Config
 import logging
 from logging.handlers import RotatingFileHandler
@@ -11,14 +12,19 @@ from logging.handlers import RotatingFileHandler
 csrf = CSRFProtect()
 db = SQLAlchemy()
 limiter = Limiter(key_func=get_remote_address) #adding a rate limiter to prevent brute force login attempts
+bcrypt = Bcrypt()
 
 def create_app():
     app = Flask(__name__)
-    limiter.init_app(app)
     app.config.from_object(Config)
 
-    #csrf protection
+    db.init_app(app)
+    bcrypt.init_app(app) #for pw hashing in models.py
+    limiter.init_app(app)
     csrf.init_app(app) #csrf protect
+
+    from app.routes import main
+    app.register_blueprint(main)
 
     # configuring logging for log rotation
     log_dir='logs'
@@ -36,8 +42,6 @@ def create_app():
     app.logger.handlers=[]
     app.logger.addHandler(handler)
     app.logger.setLevel(logging.INFO)
-
-    db.init_app(app)
 
     return app
 
