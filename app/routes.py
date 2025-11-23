@@ -1,8 +1,8 @@
 import hashlib
 import traceback
 from flask import request, render_template, redirect, url_for, session, Blueprint, flash, abort, current_app
-from app import db
-from app.forms import RegisterForm
+from app import db, limiter, bcrypt
+from app.forms import RegisterForm, LoginForm
 from app.models import User
 
 main = Blueprint('main', __name__)
@@ -56,5 +56,31 @@ def register():
                                                f"Error: {error}, IP: {hash_for_log(user_ip)}.")
     return render_template('register.html', form=form)
 
+@main.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
+def login():
+    form = LoginForm()
+    user_ip = request.remote_addr or "Unknown IP"
+    if form.validate_on_submit():
+        try:
+            user = User.query.filter_by(email=form.email.data).first()
 
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
+                session.clear()
+                session.permanent=True
+                session['user_id'] = user.id
+                session['name'] = user.name
 
+                flash('Login successful!', 'success')
+                current_app.logger.info(f'Successfully logged in. Username: {hash_for_log(user.name)}, IP Address: {hash_for_log(user_ip)}')
+                return redirect(url_for('main.dashboard'))
+            else:
+                flash('Invalid username or password.', 'error')
+                current_app.logger.warning(f'Failed login attempt. IP: {hash_for_log(user_ip)}.')
+        except Exception:
+            db.session.rollback()
+    return render_template('login.html', form=form)
+
+@main.route('/dashboard')
+def dashboard():
+    return "DASHBOARD"

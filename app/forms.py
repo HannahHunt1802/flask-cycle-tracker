@@ -37,3 +37,8 @@ class RegisterForm(FlaskForm):
 
         if ' ' in password:
             raise ValidationError('Password must not contain whitespace.')
+
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email(message="Invalid email address.")])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
