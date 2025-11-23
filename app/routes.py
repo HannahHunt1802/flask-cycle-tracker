@@ -13,7 +13,8 @@ def hash_for_log(value):
 
 @main.route('/')
 def base():
-    return render_template('base.html')
+    form = LoginForm()
+    return render_template('login.html', form=form)
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
