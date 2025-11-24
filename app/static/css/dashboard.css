@@ -1,0 +1,212 @@
+/* ================================
+   1. Dashboard
+====================================*/
+.dashboard-background{
+    background-color:#D7CAB8;
+    height:100vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.dashboard-background h1{
+    color:#1E692A;
+    font-weight:bold;
+    font-size:100px;
+    padding:20px;
+}
+.dashboard-background .log-period-btn{
+    background-color: #D7CAB8;
+    color: #8C7656;
+    font-size: 40px;
+    border: none;
+    display:flex;
+    position: relative;
+    top:38%;
+    left:42%;
+    text-align: center;
+    height:60px;
+    width: 210px;
+    cursor: pointer;
+}
+
+.tab-container{
+    position:absolute;
+    top:15%;
+    height:60px;
+    width: 62%;;
+    background-color:#D2C2AB;
+    padding-top: 20px;
+    padding-inline:25px;
+    border-radius: 10px;
+    margin: 55px auto;
+    display:flex;
+}
+/* for each individual tab */
+.tab {
+    padding: 15px 25px;
+    background-color: #53785A;
+    color: #d8d4ce;
+    border-left:2px solid #D2C2AB;
+    border-top:2px solid #D2C2AB;
+    text-decoration: none;
+    /*creating rounded corners only at the top of the tabs*/
+    border-radius: 10px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, z-index 0.3s;
+    position: relative;
+    top: 0;
+    z-index: 1;
+    margin-left:-10px; /*creates overlap*/
+    /*default dimensions*/
+    height:40px;
+    width:120px;
+    /*handling when the tab names are too long*/
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+    /*centering text*/
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    /*smooth transition when tab resizes*/
+    transition: height 0.3s ease, width 0.3s ease, margin-top 0.3s ease, box-shadow 0.3s ease;
+}
+/* when hovering over the tab */
+.tab:hover {
+    background-color:#1E692A;
+    height:50px;
+    width:180px;
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    margin-top:-10px; /*makes sure the tab pops up, not down.*/
+    cursor:pointer;
+}
+/* selected tab appears in front */
+.tab.active {
+    background-color: #1E692A;
+    color: white;
+    height:60px;
+    width:180px;
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    margin-top: -20px;
+    cursor:pointer;
+}
+
+/*editing new tab button style*/
+.tab-container .new-tab-button {
+    padding: 15px 25px;
+    background-color: #1E692A;
+    color: #d8d4ce;
+    border:none;
+    border-left:2px solid #D2C2AB;
+    border-top:2px solid #D2C2AB;
+    text-decoration: none;
+    border-radius: 10px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, z-index 0.3s;
+    position: relative;
+    top:0;
+    cursor: pointer;
+    opacity: 50%;
+    height:40px;
+    width: 40px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    transition: height 0.3s ease, width 0.3s ease, margin-top 0.3s ease, box-shadow 0.3s ease;
+}
+.tab-container .new-tab-button:hover {
+    opacity:90%;
+    border-radius: 10px;
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    margin-top:-7px;
+    animation: bulge 2s ease-in-out infinite; /*adding bulging animation*/
+}
+/*creating bulging animation*/
+@keyframes bulge{
+    0%, 100% {transform: scale(1);}
+    50% {transform: scale(1.05);}
+}
+
+/* Today update section */
+.today-container{
+    position:fixed;
+    height:229px;
+    width: 37%;
+    background-color:#9AA6BB;
+    padding-top: 20px;
+    padding-inline:25px;
+    border-radius: 10px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    top:16px;
+    right: 12px;
+    display:flex;
+    flex-direction: column;
+}
+/*today-container text*/
+.today-container #period{
+    opacity:90%;
+    color:#354B74;
+    font-size: 35px;
+    text-align: center;
+}
+.today-container #ovulation{
+    color:#354B74;
+    font-size: 70px;
+    text-align: center;
+}
+.today-container #sun{
+    opacity:90%;
+    color:#354B74;
+    font-size: 25px;
+    text-align: left;
+}
+
+/*for sun animation*/
+.sun-moon-container{
+    position:relative;
+    left:310px;
+    top: 10px;
+    height:220px;
+    width: 220px;
+}
+.sun-center{
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index:2;
+}
+.rays{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    animation: spin 30s linear infinite;
+}
+@keyframes spin{
+    0% {transform: translate(-50%, -50%) rotate(0deg)}
+    100% {transform:translate(-50%, -50%) rotate(360deg)}
+}
+.moon{
+
+}
+
+/* ================================
+   2. Tab Contents
+====================================*/
+
+.tab-content {
+    /*by default, tab contents are not displayed.*/
+    display: none;
+}
+.tab-content.active {
+  display: block;
+}
