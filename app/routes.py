@@ -15,7 +15,8 @@ def hash_for_log(value):
 @main.route('/')
 def base():
     form=LoginForm()
-    user = User.query.get(session['user_id'])
+    user_id = session.get('user_id')
+    user = User.query.get(user_id) if user_id else None
     if 'user_id' in session:
         return render_template('dashboard.html', user=user)
     return render_template('login.html', form=form)
@@ -99,6 +100,8 @@ def login():
     return render_template('login.html', form=form)
 
 @main.route('/dashboard')
+@login_required
 def dashboard():
-    user = User.query.get(session['user_id'])
+    user_id = session.get('user_id')
+    user = User.query.get(user_id) if user_id else None
     return render_template('dashboard.html', user=user)
