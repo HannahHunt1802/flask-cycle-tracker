@@ -5,25 +5,37 @@
 
 <!-- Flash messages -->
 {% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<p class="text-danger">{{ message }}</p>
-{% endfor %}
-{% endif %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <p class="flash {{ category }}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
 {% endwith %}
 
-<form method="POST" novalidate>
-    {{ form.hidden_tag() }}
-    <p>{{ form.email.label }} {{ form.email(placeholder="Email") }}
-    {% for error in form.email.errors %} <span style="color: red;">{{ error }}</span> {% endfor %}</p>
-    <p>{{ form.password.label }} {{ form.password(placeholder="Password") }}
-        {% for error in form.password.errors %} <span style="color: red;">{{ error }}</span> {% endfor %}</p>
-    <p>{{ form.submit() }}</p>
-</form>
+<section id="form-container">
+    <form method="POST" action="{{ url_for('main.login') }}"novalidate>
+        {{ form.hidden_tag() }}
+        <label for="email">{{ form.email.label }}</label>
+        {{ form.email(placeholder="Email") }}
+        {% for error in form.email.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
 
-<p>Don't have an account?
-    <a href="{{ url_for('main.register') }}"><button type="button">Register Here</button>
-    </a>
+        <label for="password">{{ form.password.label }}</label>
+        {{ form.password(placeholder="Password") }}
+        {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+
+        <section class="btn-container">
+          {{ form.submit(class="sign-in-btn") }}
+        </section>
+    </form>
+</section>
+<div class="link-container">
+    <p>Don't have an account?
+    <a href="{{ url_for('main.register') }}">
+        <button type="button" class="link-btn">Register Here</button></a>
 </p>
-</p>
+</div>
 {% endblock %}

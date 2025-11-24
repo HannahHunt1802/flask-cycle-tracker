@@ -2,26 +2,45 @@
 {% block title %}Register{% endblock %}
 {% block content %}
 <h1>Register</h1>
-<form method="POST" novalidate>
-    {{ form.hidden_tag() }} <!-- includes csrf token automatically -->
 
-    <p>{{ form.name.label }} {{ form.name(placeholder="Name") }}
-        {% for error in form.name.errors %} <span style="color: red;">{{ error }}</span> {% endfor %}
-    </p>
-    <p>{{ form.email.label }} {{ form.email(placeholder="Email") }}
-        {% for error in form.email.errors %} <span style="color: red;">{{ error }}</span> {% endfor %}
-    </p>
-    <p>{{ form.password.label }} {{ form.password(placeholder="Password") }}
-        {% for error in form.password.errors %} <span style="color: red;">{{ error }}</span> {% endfor %}
-    </p>
-    <p>{{ form.confirm_password.label }} {{ form.confirm_password(placeholder="Confirm Password") }}
-        {% for error in form.confirm_password.errors %} <span style="color: red;">{{ error }}</span> {% endfor %}
-    </p>
-    <p>{{ form.submit() }}</p>
-</form>
+<section id="form-container">
+    <form method="POST" novalidate>
+        {{ form.hidden_tag() }} <!-- includes csrf token automatically -->
 
-<p>Already registered?
-    <a href="{{ url_for('main.login') }}"><button type="button">Login Here</button>
-    </a>
-</p>
+        <label for="name">{{ form.name.label }}</label>
+        {{ form.name(placeholder="Name") }}
+        {% for error in form.name.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+
+        <label for="email">{{ form.email.label }}</label>
+        {{ form.email(placeholder="Email") }}
+        {% for error in form.email.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+
+        <label for="password">{{ form.password.label }}</label>
+        {{ form.password(placeholder="Password") }}
+        {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+
+        <label for="confirm_password">{{ form.confirm_password.label }}</label>
+        {{ form.confirm_password(placeholder="Confirm Password") }}
+        {% for error in form.confirm_password.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+
+        <section class="btn-container">
+          {{ form.submit(class="sign-in-btn") }}
+        </section>
+    </form>
+</section>
+
+<div class="link-container">
+    <p>Already registered?
+        <a href="{{ url_for('main.login') }}">
+            <button type="button" class="link-btn">Login Here</button></a>
+    </p>
+</div>
 {% endblock %}
