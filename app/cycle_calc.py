@@ -35,13 +35,13 @@ def calculate_cycle_predictions(user):
         period_text = f"Period day {day_num}"
     else: period_text="Null"
 
-    if days_until_ovulation > 0:
-        ovulation_text = f"Next ovulation: {days_until_ovulation} days"
+    if -2 <= days_until_ovulation <= 2:
+        ovulation_text = "High fertility today"
     elif days_until_ovulation == 0:
         ovulation_text = "Ovulation day"
-    elif -2 <= days_until_ovulation <= 2:
-        ovulation_text = "High fertility today"
-    else: ovulation_text="Null"
+    elif days_until_ovulation > 0:
+        ovulation_text = f"Next ovulation: {days_until_ovulation} days"
+    else: ovulation_text=f"Ovulation was {-days_until_ovulation} days ago"
 
     return {"period": period_text, "ovulation": ovulation_text}
 
