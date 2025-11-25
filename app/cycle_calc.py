@@ -2,8 +2,8 @@ from datetime import date, timedelta
 
 #method to fill in info for today-container in dashboard.html
 def calculate_cycle_predictions(user):
-    settings=user.cycle_settings
-    logs=user.period_log
+    settings = getattr(user, "cycle_settings", None)
+    logs = getattr(user, "period_log", [])
 
     #if no data on account
     if not settings or not logs:
