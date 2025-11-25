@@ -14,6 +14,12 @@
             <h1>Hello, {{ user.name }}!</h1>
             <button class="log-period-btn">Log Period</button>
 
+            <!--logout btn-->
+            <form method="POST" action="{{ url_for('main.logout') }}" novalidate>
+                {{ logout_form.hidden_tag() }}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+
             <!--tabs-->
             <div class="tab-container">
                 <a data-target="calendar-tab" class="tab">Calendar</a>
@@ -42,6 +48,6 @@
             <div id="statistics-tab" class="tab-content">
                 <p>Here are you cycle statistics.</p>
             </div>
-        </div>
+        </button>
     </div>
 </body>

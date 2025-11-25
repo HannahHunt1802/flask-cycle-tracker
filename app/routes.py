@@ -3,7 +3,7 @@ import traceback
 from flask import request, render_template, redirect, url_for, session, Blueprint, flash, current_app
 from functools import wraps
 from app import db, limiter, bcrypt
-from app.forms import RegisterForm, LoginForm
+from app.forms import RegisterForm, LoginForm, LogoutForm
 from app.models import User
 
 main = Blueprint('main', __name__)
@@ -14,12 +14,15 @@ def hash_for_log(value):
 
 @main.route('/')
 def base():
-    form=LoginForm()
+    login_form = LoginForm()
+    logout_form=LogoutForm()
+
     user_id = session.get('user_id')
     user = User.query.get(user_id) if user_id else None
+
     if 'user_id' in session:
-        return render_template('dashboard.html', user=user)
-    return render_template('login.html', form=form)
+        return render_template('dashboard.html', user=user, logout_form=logout_form)
+    return render_template('login.html', login_form=login_form)
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
@@ -112,6 +115,7 @@ def logout():
 @main.route('/dashboard')
 @login_required
 def dashboard():
+    logout_form = LogoutForm()
     user_id = session.get('user_id')
     user = User.query.get(user_id) if user_id else None
-    return render_template('dashboard.html', user=user)
+    return render_template('dashboard.html', user=user, logout_form=logout_form)
