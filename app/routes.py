@@ -21,8 +21,8 @@ def base():
     user = User.query.get(user_id) if user_id else None
 
     if 'user_id' in session:
-        return render_template('dashboard.html', user=user, logout_form=logout_form)
-    return render_template('login.html', login_form=login_form)
+        return render_template('dashboard.html', user=user, form=logout_form)
+    return render_template('login.html', form=login_form)
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
@@ -118,4 +118,4 @@ def dashboard():
     logout_form = LogoutForm()
     user_id = session.get('user_id')
     user = User.query.get(user_id) if user_id else None
-    return render_template('dashboard.html', user=user, logout_form=logout_form)
+    return render_template('dashboard.html', user=user, form=logout_form)

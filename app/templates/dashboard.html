@@ -16,7 +16,7 @@
 
             <!--logout btn-->
             <form method="POST" action="{{ url_for('main.logout') }}" novalidate>
-                {{ logout_form.hidden_tag() }}
+                {{ form.hidden_tag() }}
                 <button type="submit" class="logout-btn">Logout</button>
             </form>
 
