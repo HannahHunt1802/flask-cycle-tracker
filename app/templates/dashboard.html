@@ -14,16 +14,17 @@
             <h1>Hello, {{ user.name }}!</h1>
             <button class="log-period-btn">Log Period</button>
 
-            <!--logout btn-->
-            <form method="POST" action="{{ url_for('main.logout') }}" novalidate>
-                {{ form.hidden_tag() }}
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
-
             <!--tabs-->
             <div class="tab-container">
                 <a data-target="calendar-tab" class="tab">Calendar</a>
-                <a data-target="statistics-tab" class="tab">My Plants</a>
+                <a data-target="settings-tab" class="tab">My Account</a>
+                <a data-target="my-cycle-tab" class="tab">My Cycle</a>
+                <a data-target="logout-tab" class="tab">Log Out</a>
+
+                <!--invisible logout form-->
+                <form method="POST" action="{{ url_for('main.logout') }}" style="display:none;" id="logout-form" novalidate>
+                    {{ form.hidden_tag() }}
+                </form>
             </div>
 
             <!--next event container-->
@@ -48,6 +49,8 @@
             <div id="statistics-tab" class="tab-content">
                 <p>Here are you cycle statistics.</p>
             </div>
-        </button>
+        </div>
     </div>
+    <!-- js -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>
