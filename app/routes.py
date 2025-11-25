@@ -1,6 +1,6 @@
 import hashlib
 import traceback
-from flask import request, render_template, redirect, url_for, session, Blueprint, flash, current_app
+from flask import request, render_template, redirect, url_for, session, Blueprint, flash, current_app, abort
 from functools import wraps
 
 from app import db, limiter, bcrypt
@@ -19,13 +19,15 @@ def base():
     login_form = LoginForm()
     logout_form=LogoutForm()
     update_profile_form = UpdateProfileForm()
+    change_password_form = ChangePasswordForm()
 
     user_id = session.get('user_id')
     user = User.query.get(user_id) if user_id else None
     cycle_pred = calculate_cycle_predictions(user)
 
     if 'user_id' in session:
-        return render_template('dashboard.html', user=user, logout_form=logout_form, update_profile_form=update_profile_form, cycle_pred=cycle_pred)
+        return render_template('dashboard.html', user=user, logout_form=logout_form, update_profile_form=update_profile_form,
+                               change_password_form=change_password_form, cycle_pred=cycle_pred)
     return render_template('login.html', login_form=login_form)
 
 @main.route('/register', methods=['GET', 'POST'])
@@ -172,3 +174,67 @@ def update_profile():
     return redirect(url_for('main.dashboard'))
 
 
+@main.route('/change_password', methods=['POST'])
+@login_required
+def change_password():
+    change_password_form = ChangePasswordForm()
+    user_ip = request.remote_addr or "Unknown IP"
+    user_id = session.get('user_id')
+    user = db.session.get(User, user_id)
+
+    if not user:
+        current_app.logger.warning(
+            f"Unauthorized password change attempt. Invalid user_id in session. "
+            f"user_id={hash_for_log(user_id)}, IP={hash_for_log(user_ip)}"
+        )
+        abort(403, description="Access denied.")
+
+    if change_password_form.validate_on_submit():
+        try:
+            if not user.check_password(change_password_form.current_password.data):
+                flash('Current password is incorrect.', 'error')
+                current_app.logger.warning(
+                    f"Password change failed. Incorrect current password. User: {hash_for_log(user.name)}, "
+                    f"user_id={hash_for_log(user.id)}, IP={hash_for_log(user_ip)}"
+                )
+                return render_template('change_password.html', change_password_form=change_password_form)
+
+                # Check new password is different
+            if user.check_password(change_password_form.new_password.data):
+                flash('New password must be different from the current password.', 'error')
+                current_app.logger.warning(
+                    f"Password change failed. New password same as current. User: {hash_for_log(user.name)}, "
+                    f"user_id={hash_for_log(user.id)}, IP={hash_for_log(user_ip)}"
+                )
+                return render_template('change_password.html', change_password_form=change_password_form)
+
+            # Update password
+            user.set_password(change_password_form.new_password.data)
+            db.session.commit()
+            flash('Password changed successfully.', 'success')
+            current_app.logger.info(
+                f"Password changed successfully. User: {hash_for_log(user.name)}, "
+                f"user_id={hash_for_log(user.id)}, IP={hash_for_log(user_ip)}"
+            )
+            return redirect(url_for('main.dashboard'))
+
+        except Exception:
+            db.session.rollback()
+            flash("An unexpected error occurred while changing the password.", "error")
+            current_app.logger.error(
+                f"Password change failed. User: {hash_for_log(user.name)}, "
+                f"user_id={hash_for_log(user.id)}, IP={hash_for_log(user_ip)}",
+                exc_info=True
+            )
+
+    else:
+        # Log all form validation errors
+        for field, errors in change_password_form.errors.items():
+            for error in errors:
+                flash(f"{field}: {error}", "error")
+                current_app.logger.warning(
+                    f"Change password validation failed. Field: {field}, Error: {error}, "
+                    f"User: {hash_for_log(user.name)}, user_id={hash_for_log(user.id)}, IP={hash_for_log(user_ip)}"
+                )
+
+    return render_template('change_password.html', change_password_form=change_password_form)

@@ -18,7 +18,8 @@ body {
 ====================================*/
 .dashboard-background{
     background-color:#D7CAB8;
-    height:100vh;
+    min-height: 100vh; /* stays at least full screen */
+    height: auto; /* expands if content is taller */
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -43,6 +44,9 @@ body {
     height:60px;
     width: 210px;
     cursor: pointer;
+}
+.dashboard-nav{
+    z-index:1;
 }
 
 .tab-container{
@@ -111,7 +115,7 @@ body {
 }
 /* Today update section */
 .today-container{
-    position:fixed;
+    position:absolute;
     height:229px;
     width: 37%;
     background-color:#AA84AB;
@@ -128,12 +132,12 @@ body {
 /*today-container text*/
 .today-container #period{
     opacity:90%;
-    color:#602361; /* text brown */
+    color:#602361;
     font-size: 35px;
     text-align: center;
 }
 .today-container #ovulation{
-    color:#602361; /* brown */
+    color:#602361;
     font-size: 70px;
     text-align: center;
 }
@@ -185,4 +189,160 @@ body {
 }
 .tab-content.active {
   display: block;
+}
+
+/* ================================
+   SETTINGS TAB (MY ACCOUNT)
+====================================*/
+.tab-content{
+    z-index:0;
+}
+/* Full-width container inside the tab content */
+.open-tab-container {
+    background-color: #D2C2AB;
+    position: absolute;
+    z-index: 0;
+    top: 25%;
+    padding: 70px 250px;
+    border-radius: 0 0 20px 20px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* form groups and headings */
+.open-tab-container h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #354B74;
+    font-size: 30px;
+}
+
+.open-tab-container form {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* individual input fields */
+.open-tab-container .form-control {
+    background-color: #d8d4ce;
+    border: 1px solid #a99a86;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+    color: #483924;
+    font-family: inherit;
+    width: 100%;
+}
+
+/* buttons */
+.open-tab-container .btn {
+    max-width: 500px;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-items: center;
+    padding: 12px 0;
+}
+
+/* horizontal rule spacing */
+.open-tab-container hr {
+    margin: 30px 0;
+    border-color: #a99a86;
+}
+
+/* form groups */
+.update_profile_form-group,
+.open-tab-container .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+/* labels */
+.open-tab-container label {
+    color: #483924;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+/* focus/active state */
+.open-tab-container input.form-control:focus,
+.open-tab-container input.form-control:active {
+    outline: none;
+    border: 1px solid #AC536F;
+    background-color: #d8d4ce;
+    color: #483924;
+}
+
+/* hover state */
+.open-tab-container input.form-control:hover {
+    border: 1px solid #AC536F;
+}
+
+/* update profile button */
+.open-tab-container button.btn-primary {
+    background: linear-gradient(135deg, #AC536F, #AA84AB);
+    color: #d7cab8;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.open-tab-container button.btn-primary:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #2d3f5f, #3f5f8a);
+}
+
+/* change password button */
+.open-tab-container button.btn-warning {
+    background-color: #E6A23C;
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.open-tab-container button.btn-warning:hover {
+    transform: translateY(-2px);
+    background-color: #d48806;
+}
+
+/* delete account button */
+.open-tab-container button.btn-danger {
+    background-color: #F56C6C;
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.open-tab-container button.btn-danger:hover {
+    transform: translateY(-2px);
+    background-color: #c9302c;
+}
+
+/* fade in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* responsive adjustments */
+@media (max-width: 768px) {
+    .open-tab-container {
+        padding: 20px;
+        width: 95%;
+    }
+
+    .open-tab-container h3 {
+        font-size: 24px;
+    }
+
+    .open-tab-container button.btn {
+        font-size: 16px;
+    }
 }

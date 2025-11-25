@@ -10,34 +10,36 @@
 <body>
     <div id="dashboard" class="dashboard">
         <div class="dashboard-background">
+            <div class="dashboard-nav">
 
-            <h1>Hello, {{ user.name }}!</h1>
-            <button class="log-period-btn">Log Period</button>
+                <h1>Hello, {{ user.name }}!</h1>
+                <button class="log-period-btn">Log Period</button>
 
-            <!--tabs-->
-            <div class="tab-container">
-                <a data-target="my-cycle-tab" class="tab">My Cycle</a>
-                <a data-target="calendar-tab" class="tab">Calendar</a>
-                <a data-target="settings-tab" class="tab">My Account</a>
-                <a data-target="logout-tab" class="tab">Log Out</a>
+                <!--tabs-->
+                <div class="tab-container">
+                    <a data-target="my-cycle-tab" class="tab">My Cycle</a>
+                    <a data-target="calendar-tab" class="tab">Calendar</a>
+                    <a data-target="settings-tab" class="tab">My Account</a>
+                    <a data-target="logout-tab" class="tab">Log Out</a>
 
-                <!--invisible logout form-->
-                <form method="POST" action="{{ url_for('main.logout') }}" style="display:none;" id="logout-form" novalidate>
-                    {{ logout_form.hidden_tag() }}
-                </form>
-            </div>
+                    <!--invisible logout form-->
+                    <form method="POST" action="{{ url_for('main.logout') }}" style="display:none;" id="logout-form" novalidate>
+                        {{ logout_form.hidden_tag() }}
+                    </form>
+                </div>
 
-            <!--next event container-->
-            <div class="today-container">
-                <h2 id="period" class="today">{{ cycle_pred.period}}</h2>
-                <h2 id="ovulation" class="today">{{ cycle_pred.ovulation}}</h2>
-                <div class="sun-moon-container">
-                    <div class="sun">
-                        <img src="{{ url_for('static', filename='assets/Centre.png') }}" alt="Sun Center" class="sun-center">
-                        <img src="{{ url_for('static', filename='assets/Rays.png') }}" alt="Rays" class="rays">
-                    </div>
-                    <div class="moon">
-                        <img src="{{ url_for('static', filename='assets/Moon.png') }}" alt="Moon">
+                <!--next event container-->
+                <div class="today-container">
+                    <h2 id="period" class="today">{{ cycle_pred.period }}</h2>
+                    <h2 id="ovulation" class="today">{{ cycle_pred.ovulation }}</h2>
+                    <div class="sun-moon-container">
+                        <div class="sun">
+                            <img src="{{ url_for('static', filename='assets/Centre.png') }}" alt="Sun Center" class="sun-center">
+                            <img src="{{ url_for('static', filename='assets/Rays.png') }}" alt="Rays" class="rays">
+                        </div>
+                        <div class="moon">
+                            <img src="{{ url_for('static', filename='assets/Moon.png') }}" alt="Moon">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -49,41 +51,64 @@
 
             <!-- SETTINGS TAB (MY ACCOUNT) -->
             <div id="settings-tab" class="tab-content">
-                <div class="open-tab-container" id="setting-tab-container">
+                <div class="open-tab-container">
 
-                    <h3>My Account</h3>
-                    <form method="POST" action="{{ url_for('main.update_profile') }}" novalidate>
-                        {{ update_profile_form.hidden_tag() }}
+                    <div class="open-tab-inner">
+                        <h3>My Account</h3>
+                        <form method="POST" action="{{ url_for('main.update_profile') }}" novalidate>
+                            {{ update_profile_form.hidden_tag() }}
 
-                        <div class="update_profile_form-group">
-                            <label for="name">Name:</label>
-                            {{ update_profile_form.name(class="form-control", value=user.name) }}
-                        </div>
+                            <div class="update_profile_form-group">
+                                <label for="name">Name:</label>
+                                {{ update_profile_form.name(class="form-control", value=user.name) }}
+                            </div>
 
-                        <div class="update_profile_form-group">
-                            <label for="email">Email:</label>
-                            {{ update_profile_form.email(class="form-control", value=user.email) }}
-                        </div>
+                            <div class="update_profile_form-group">
+                                <label for="email">Email:</label>
+                                {{ update_profile_form.email(class="form-control", value=user.email) }}
+                            </div>
 
-                        <button type="submit" class="btn btn-primary">Update Profile</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
+                    </div>
                     <hr>
 
-                    <h3>Change Password</h3>
-                    <!--Old Password
-                    New Password
-                    Confirm new password
-                    Submit-->
+                    <div class="open-tab-inner">
+                        <h3>Change Password</h3>
+                        <form method="POST" action="{{ url_for('main.change_password') }}">
+                            {{ change_password_form.hidden_tag() }}
+                            <div class="form-group">
+                                <label for="old_password">Current Password:</label>
+                                {{ change_password_form.old_password(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password">New Password:</label>
+                                {{ change_password_form.new_password(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm_password">Confirm New Password:</label>
+                                {{ change_password_form.confirm_password(class="form-control") }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Change Password</button>
+                        </form>
+                    </div>
+                    <hr>
 
-                    <h3>Cycle Settings</h3>
-                    <!--Regular Cycle toggle
-                    Average Period Length: updates if cycle length is changed
-                    Average Cycle Length: updates if period length is changed-->
+                    <div class="open-tab-inner">
+                        <h3>Cycle Settings</h3>
+                        <!--Regular Cycle toggle
+                        Average Period Length: updates if cycle length is changed
+                        Average Cycle Length: updates if period length is changed-->
+                    </div>
+                    <hr>
 
-                    <h3>Danger Zone</h3>
-                    <!--Delete account
-                    Are you sure you want to delete this account?
-                    Account deleted --- > logout. -->
+                    <div class="open-tab-inner">
+                        <h3>Danger Zone</h3>
+                        <!--Delete account
+                        Are you sure you want to delete this account?
+                        Account deleted --- > logout. -->
+                    </div>
+                    <hr>
 
                 </div>
             </div>

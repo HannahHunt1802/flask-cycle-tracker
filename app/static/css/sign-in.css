@@ -29,7 +29,8 @@ input:-webkit-autofill:active {
 ====================================*/
 .signinpage {
     background-color: #d7cab8;
-    height:100vh;
+    min-height: 100vh; /* stays at least full screen */
+    height: auto; /* expands if content is taller */
     display:flex;
     justify-content:center;
     align-items:center;
