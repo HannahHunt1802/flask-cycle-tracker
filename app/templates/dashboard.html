@@ -6,21 +6,33 @@
     <title>{% block title %}Dashboard{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <!-- FullCalendar css -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <!-- FullCalendar js must go before dashboard.js -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+    <script src="{{ url_for('static', filename='dashboard.js') }}" defer></script>
 </head>
 <body>
+    <!-- Inject Flask data for calendar events -->
+    <script>
+        window.user_periods = {{ user_periods|tojson|safe }};
+    </script>
+
     <div id="dashboard" class="dashboard">
         <!-- Flash messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <div class="flash-messages">
-              {% for category, message in messages %}
-                <div class="flash {{ category }}">
-                  {{ message }}
-                </div>
-              {% endfor %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
             </div>
-          {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
         {% endwith %}
+
         <div class="dashboard-background">
             <div class="dashboard-nav">
 
@@ -29,10 +41,10 @@
 
                 <!--tabs-->
                 <div class="tab-container">
-                    <a data-target="my-cycle-tab" class="tab">My Cycle</a>
-                    <a data-target="calendar-tab" class="tab">Calendar</a>
-                    <a data-target="settings-tab" class="tab">My Account</a>
-                    <a data-target="logout-tab" class="tab">Log Out</a>
+                    <a href="#" data-target="my-cycle-tab" class="tab">My Cycle</a>
+                    <a href="#" data-target="calendar-tab" class="tab">Calendar</a>
+                    <a href="#" data-target="settings-tab" class="tab">My Account</a>
+                    <a href="#" data-target="logout-tab" class="tab">Log Out</a>
 
                     <!--invisible logout form-->
                     <form method="POST" action="{{ url_for('main.logout') }}" style="display:none;" id="logout-form" novalidate>
@@ -58,12 +70,26 @@
                 </div>
             </div>
 
-            <!-- tab content-->
-            <div id="calendar-tab" class="tab-content">
-                <p>This is the calendar.</p>
+            <!-- MY CYCLE TAB -->
+            <div id="my-cycle-tab" class="tab-content">
+                <div class="open-tab-container">
+                    <div class="open-tab-inner">
+                        <p>My Cycle content goes here.</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- SETTINGS TAB (MY ACCOUNT) -->
+            <!-- CALENDAR TAB -->
+            <div id="calendar-tab" class="tab-content">
+                <div class="open-tab-container">
+                    <div class="open-tab-inner">
+                        <h3>Calendar</h3>
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS TAB -->
             <div id="settings-tab" class="tab-content">
                 <div class="open-tab-container">
 
@@ -124,13 +150,11 @@
                             <div class="form-group">
                                 <label for="avg_period_length">Average Period Length (days):</label>
                                 {{ update_cycle_settings_form.avg_period_length(class="form-control") }}
-
                             </div>
 
                             <div class="form-group">
                                 <label for="avg_cycle_length">Average Cycle Length (days):</label>
                                 {{ update_cycle_settings_form.avg_cycle_length(class="form-control") }}
-
                             </div>
 
                             <button type="submit" class="btn btn-primary">Update Cycle Settings</button>
@@ -156,6 +180,6 @@
             </div>
         </div>
     </div>
-    <!-- js -->
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>
+</html>

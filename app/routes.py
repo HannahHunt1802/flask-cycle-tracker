@@ -128,6 +128,21 @@ def get_prefilled_cycle_data():
 
     return form
 
+def get_user_periods():
+    user = get_current_user()
+    if not user:
+        return []
+
+    periods = PeriodLog.query.filter_by(user_id=user.id).all()
+    return [
+        {
+            "title": "Period",
+            "start": p.period_start.isoformat(),
+            "end": p.period_end.isoformat() if p.period_end else p.period_start.isoformat()
+        }
+        for p in periods
+    ]
+
 def dashboard_context():
     user = get_current_user()
 
@@ -138,7 +153,8 @@ def dashboard_context():
         "change_password_form": ChangePasswordForm(),
         "update_cycle_settings_form": get_prefilled_cycle_data(),
         "delete_account_form": DeleteAccountForm(),
-        "cycle_pred": calculate_cycle_predictions(user)
+        "cycle_pred": calculate_cycle_predictions(user),
+        "user_periods": get_user_periods()
     }
 
 @main.route('/')
