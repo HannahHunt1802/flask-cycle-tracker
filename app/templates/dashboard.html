@@ -30,8 +30,10 @@
 
                 <!--next event container-->
                 <div class="today-container">
-                    <h2 id="period" class="today">{{ cycle_pred.period }}</h2>
-                    <h2 id="ovulation" class="today">{{ cycle_pred.ovulation }}</h2>
+                    <h4 class="small-text">{{ cycle_pred.main_event }}</h4>
+                    <h2 class="large-text">{{ cycle_pred.main_text }}</h2>
+                    <p class="smallest-text">{{ cycle_pred.secondary_text }}</p>
+
                     <div class="sun-moon-container">
                         <div class="sun">
                             <img src="{{ url_for('static', filename='assets/Centre.png') }}" alt="Sun Center" class="sun-center">

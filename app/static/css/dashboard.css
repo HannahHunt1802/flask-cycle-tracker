@@ -185,17 +185,26 @@ input:-webkit-autofill:active {
     display:flex;
     flex-direction: column;
 }
-/*today-container text*/
-.today-container #period{
-    opacity:90%;
-    color:#602361;
-    font-size: 35px;
+/*text sizings/hierarchy*/
+.today-container .small-text {
+    font-size: 40px;
+    color: #602361;
     text-align: center;
+    opacity: 0.8;
 }
-.today-container #ovulation{
-    color:#602361;
+
+.today-container .large-text {
     font-size: 70px;
+    color: #602361;
     text-align: center;
+    font-weight: bold;
+}
+
+.today-container .smallest-text {
+    font-size: 30px;
+    color: #602361;
+    text-align: center;
+    opacity: 0.7;
 }
 .today-container #sun{
     opacity:90%;
@@ -206,6 +215,7 @@ input:-webkit-autofill:active {
 
 /*for sun animation*/
 .sun-moon-container{
+    display:none;
     position:relative;
     left:310px;
     top: 10px;
