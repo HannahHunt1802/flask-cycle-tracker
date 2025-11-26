@@ -5,7 +5,7 @@ from functools import wraps
 
 from app import db, limiter, bcrypt
 from app.forms import RegisterForm, LoginForm, LogoutForm, UpdateProfileForm, ChangePasswordForm, UpdateCycleSettingsForm, DeleteAccountForm
-from app.models import User
+from app.models import User, CycleSettings, PeriodLog
 from app.cycle_calc import calculate_cycle_predictions
 
 main = Blueprint('main', __name__)
@@ -108,6 +108,26 @@ def get_current_user():
     user_id = session.get('user_id')
     return db.session.get(User, user_id) if user_id else None
 
+def get_prefilled_cycle_data():
+    user = get_current_user()
+    form = UpdateCycleSettingsForm()
+
+    default_period_length = 5
+    default_cycle_length = 28
+    default_regular_cycle = True
+
+    cycle = getattr(user, "cycle_settings", None)
+    if cycle:
+        form.avg_period_length.data = cycle.avg_period_length or default_period_length
+        form.avg_cycle_length.data = cycle.avg_cycle_length or default_cycle_length
+        form.regular_cycle.data = bool(cycle.regular_cycle)
+    else:
+        form.avg_period_length.data = default_period_length
+        form.avg_cycle_length.data = default_cycle_length
+        form.regular_cycle.data = default_regular_cycle
+
+    return form
+
 def dashboard_context():
     user = get_current_user()
 
@@ -116,7 +136,7 @@ def dashboard_context():
         "logout_form": LogoutForm(),
         "update_profile_form": UpdateProfileForm(),
         "change_password_form": ChangePasswordForm(),
-        "update_cycle_settings_form": UpdateCycleSettingsForm(),
+        "update_cycle_settings_form": get_prefilled_cycle_data(),
         "delete_account_form": DeleteAccountForm(),
         "cycle_pred": calculate_cycle_predictions(user)
     }
@@ -234,8 +254,19 @@ def update_cycle_settings():
 
     if form.validate_on_submit():
         try:
-            user.avg_period_length = form.avg_period_length.data
-            user.avg_cycle_length = form.avg_cycle_length.data
+            # Make sure the user has a cycle_settings object
+            if not user.cycle_settings:
+                # Shouldn't happen because of your after_insert listener, but just in case
+                user.cycle_settings = CycleSettings(
+                    avg_period_length=form.avg_period_length.data,
+                    avg_cycle_length=form.avg_cycle_length.data,
+                    regular_cycle=form.regular_cycle.data == "True"
+                )
+            else:
+                user.cycle_settings.avg_period_length = form.avg_period_length.data
+                user.cycle_settings.avg_cycle_length = form.avg_cycle_length.data
+                user.cycle_settings.regular_cycle = form.regular_cycle.data == "True"
+
             db.session.commit()
             flash("Cycle settings updated successfully.", "success")
             current_app.logger.info(

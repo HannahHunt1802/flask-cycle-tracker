@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, StringField, PasswordField, SelectField, IntegerField
+from wtforms import SubmitField, StringField, PasswordField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationError, Regexp, NumberRange
 from .models import User
 import re
@@ -89,7 +89,7 @@ class ChangePasswordForm(FlaskForm):
             raise ValidationError('Password must not contain whitespace.')
 
 class UpdateCycleSettingsForm(FlaskForm):
-    regular_cycle = SelectField("Regular Cycle", choices=[("True", "Yes"), ("False", "No")], validators=[DataRequired()])
+    regular_cycle = BooleanField("Regular Cycle")  # checkbox toggle
     avg_period_length = IntegerField("Average Period Length", validators=[DataRequired(), NumberRange(min=1, max=15)]) #if number outside of range then automatically toggle cycle to irregular
     avg_cycle_length = IntegerField("Average Cycle Length", validators=[DataRequired(), NumberRange(min=21, max=60)]) #if number outside of range then automatically toggle cycle to irregular
     submit = SubmitField("Update Cycle Settings")
