@@ -308,6 +308,7 @@ def update_cycle_settings():
 def delete_account():
     user = get_current_user()
     user_ip = request.remote_addr or "Unknown IP"
+    user_id=user.id
 
     if not user:
         flash("User not found.", "error")
@@ -320,7 +321,7 @@ def delete_account():
         session.clear()
         flash("Account deleted successfully.", "success")
         current_app.logger.info(
-            f"User account deleted. User ID: {hash_for_log(user.id)}, IP: {hash_for_log(user_ip)}"
+            f"User account deleted. User ID: {hash_for_log(user_id)}, IP: {hash_for_log(user_ip)}"
         )
         return redirect(url_for('main.login'))
 
@@ -328,7 +329,7 @@ def delete_account():
         db.session.rollback()
         flash("An error occurred while deleting the account.", "error")
         current_app.logger.error(
-            f"Failed to delete account. User ID: {hash_for_log(user.id)}, IP: {hash_for_log(user_ip)}",
+            f"Failed to delete account. User ID: {hash_for_log(user_id)}, IP: {hash_for_log(user_ip)}",
             exc_info=True
         )
     return render_template('login.html', login_form=LoginForm())
