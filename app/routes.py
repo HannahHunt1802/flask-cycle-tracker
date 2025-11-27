@@ -269,16 +269,16 @@ def update_cycle_settings():
         try:
             # Make sure the user has a cycle_settings object
             if not user.cycle_settings:
-                # Shouldn't happen because of your after_insert listener, but just in case
+                # shouldn't happen because of after_insert but just in case
                 user.cycle_settings = CycleSettings(
                     avg_period_length=form.avg_period_length.data,
                     avg_cycle_length=form.avg_cycle_length.data,
-                    regular_cycle=form.regular_cycle.data == "True"
+                    regular_cycle=bool(form.regular_cycle.data)
                 )
             else:
                 user.cycle_settings.avg_period_length = form.avg_period_length.data
                 user.cycle_settings.avg_cycle_length = form.avg_cycle_length.data
-                user.cycle_settings.regular_cycle = form.regular_cycle.data == "True"
+                user.cycle_settings.regular_cycle = bool(form.regular_cycle.data)
 
             db.session.commit()
             flash("Cycle settings updated successfully.", "success")
