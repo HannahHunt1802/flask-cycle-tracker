@@ -32,13 +32,10 @@ def register():
 
             db.session.add(new_user)
             db.session.commit()
+            # clear existing session to prevent session fixation
+            session.clear()
             flash('Registration successful!', 'success')
             current_app.logger.info(f"New registration. Username: {hash_for_log(name)}, IP Address: {hash_for_log(user_ip)}")
-
-            #clear existing session to prevent session fixation
-            session.clear()
-            session['name']= name
-            session['email'] = email
             return redirect(url_for('main.login'))
 
         except Exception:
