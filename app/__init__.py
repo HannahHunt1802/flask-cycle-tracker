@@ -58,9 +58,9 @@ def create_app():
         try:
             if not User.query.first():
                 sample_users = [
-                    {"name": "Alice", "email": "alice@example.com", "password": "Password123!"},
-                    {"name": "Bob", "email": "bob@example.com", "password": "SecurePass1@"},
-                    {"name": "Charlie", "email": "charlie@example.com", "password": "MyPass!2025"}
+                    {"name": "Hannah", "email": "hannah@email.com", "password": "Good#Pass4"},
+                    {"name": "Bob", "email": "bob@email.com", "password": "SecurePass1@"},
+                    {"name": "Charlie", "email": "charlie@email.com", "password": "MyPass!2025"}
                 ]
                 for u in sample_users:
                     user = User()
@@ -68,6 +68,25 @@ def create_app():
                     user.email = u["email"]
                     user.set_password(u["password"])
                     db.session.add(user)
+                db.session.commit()
+
+                #sample data
+                hannah = User.query.filter_by(name="Hannah").first()
+                if hannah:
+                    from datetime import date, timedelta
+                    from app.models import CycleSettings, PeriodLog
+
+                    today = date.today()
+                    last_cycle_start = today - timedelta(days=13)  # roughly one cycle ago
+                    period_logs = [
+                        PeriodLog(user_id=hannah.id, period_start=last_cycle_start,
+                                  period_end=last_cycle_start + timedelta(days=5)),
+                        PeriodLog(user_id=hannah.id, period_start=last_cycle_start - timedelta(days=28),
+                                  period_end=last_cycle_start - timedelta(days=28 - 5)),
+                        PeriodLog(user_id=hannah.id, period_start=last_cycle_start - timedelta(days=56),
+                                  period_end=last_cycle_start - timedelta(days=56 - 5))
+                    ]
+                    db.session.add_all(period_logs)
                 db.session.commit()
                 app.logger.info("Database initialized with default users.")
         except Exception as e:
