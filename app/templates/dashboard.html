@@ -84,9 +84,32 @@
                     <div class="open-tab-inner">
 
                         <h3>Calendar</h3>
-                        <div id="calendar">
-                            <button id="log-period-btn" class="btn btn-primary">Log Period</button>
+                        <div id="calendar-wrapper">
+                            <!--calendar container-->
+                            <div id="calendar">
+                                <!--<button id="log-period-btn" class="btn btn-primary">Log Period</button>-->
+                            </div>
+                            <!--day info container-->
+                            <div id="day-info-panel" class="day-info hidden">
+                                <h3 id="day-info-date"></h3>
+
+                                <div id="day-no-event" class="hidden">
+                                    <p>No period logged.</p>
+                                    <button id="btn-log-period" class="panel-btn">Log Period</button>
+                                </div>
+
+                                <div id="day-has-event" class="hidden">
+                                    <p>Period logged:</p>
+                                    <p><strong>Start:</strong> <span id="event-start"></span></p>
+                                    <p><strong>End:</strong> <span id="event-end"></span></p>
+
+                                    <button id="btn-edit-period" class="panel-btn">Edit Period</button>
+                                    <button id="btn-delete-period" class="panel-btn delete">Delete Period</button>
+                                </div>
+                            </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
