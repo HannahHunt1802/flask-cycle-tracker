@@ -24,8 +24,8 @@ A web app that allows users to track their menstrual cycle.
 ### Note on Reused Templates
 This project was built on a short deadline for a placement application, so I have
 reused some of my existing code to speed up progress:
-- The authentication boilerplate (login + register) comes from a Flask project I am currently building
-at university.
+- The authentication system (login + register) that I completed and fully implemented. I used a partially completed Flask project 
+that I am currently building at university, but all core functionality and integration were developed specifically for this project.
 - The CSS+HTML structure base is pulled from my personal project (PlantApp) because it was easy to adapt 
 and I like the styling.
 
