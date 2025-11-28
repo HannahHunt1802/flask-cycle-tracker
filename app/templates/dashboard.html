@@ -11,7 +11,7 @@
     <!-- FullCalendar js must go before dashboard.js -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 
-    <script src="{{ url_for('static', filename='dashboard.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
 </head>
 <body>
     <!-- Inject Flask data for calendar events -->
@@ -37,7 +37,6 @@
             <div class="dashboard-nav">
 
                 <h1>Hello, {{ user.name }}!</h1>
-                <button class="log-period-btn">Log Period</button>
 
                 <!--tabs-->
                 <div class="tab-container">
@@ -83,8 +82,11 @@
             <div id="calendar-tab" class="tab-content">
                 <div class="open-tab-container">
                     <div class="open-tab-inner">
+
                         <h3>Calendar</h3>
-                        <div id="calendar"></div>
+                        <div id="calendar">
+                            <button id="log-period-btn" class="btn btn-primary">Log Period</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -180,6 +182,5 @@
             </div>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>
 </html>

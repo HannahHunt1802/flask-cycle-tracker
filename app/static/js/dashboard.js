@@ -1,5 +1,3 @@
-// dashboard.js
-
 document.addEventListener("DOMContentLoaded", function () {
 
     const tabs = document.querySelectorAll(".tab");
@@ -8,6 +6,40 @@ document.addEventListener("DOMContentLoaded", function () {
     const logoutForm = document.getElementById("logout-form");
 
     let calendarRendered = false; // render calendar only once
+
+    // make calendar variable available now
+    (function initCalendar() {
+        if (typeof FullCalendar === "undefined") {
+            console.error("FullCalendar is not defined. Ensure it is loaded before dashboard.js");
+            return;
+        }
+
+        const calendarEl = document.getElementById("calendar");
+        if (!calendarEl) {
+            console.warn("#calendar element not found in DOM. Calendar can only be initialized when DOM contains #calendar.");
+            return;
+        }
+
+        // build instance
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: "dayGridMonth",
+            selectable: true,
+            editable: true,
+            eventDurationEditable: true,
+            height: "auto",
+            headerToolbar: {
+                left: "prev,next today",
+                center: "title",
+                right: ""
+            },
+            events: window.user_periods || []
+        });
+
+        // render calendar
+        calendar.render();
+        calendarRendered = true;
+        console.log("Calendar initialized and rendered.");
+    })();
 
     tabs.forEach(tab => {
         tab.addEventListener("click", (e) => {
@@ -25,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 tab.classList.remove("active");
                 const targetElement = document.getElementById(target);
                 if (targetElement) targetElement.classList.remove("active");
-                log_period_btn.style.display = "block";
+                if (log_period_btn) log_period_btn.style.display = "block";
                 return;
             }
 
@@ -38,38 +70,21 @@ document.addEventListener("DOMContentLoaded", function () {
             const targetElement = document.getElementById(target);
             if (targetElement) targetElement.classList.add("active");
 
-            log_period_btn.style.display = "none";
+            if (log_period_btn) log_period_btn.style.display = "none";
 
-            // initalize calendar
-            if (target === "calendar-tab" && !calendarRendered) {
-
-                if (typeof FullCalendar === "undefined") {
-                    console.error("FullCalendar is not defined. Check script order.");
-                    return;
-                }
-
-                const calendarEl = document.getElementById("calendar");
-
-                if (!calendarEl) {
-                    console.error("#calendar element not found.");
-                    return;
-                }
-
-                const calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: "dayGridMonth",
-                    height: "auto",
-                    headerToolbar: {
-                        left: "prev,next today",
-                        center: "title",
-                        right: ""
-                    },
-                    events: window.user_periods || []
-                });
-
-                calendar.render();
-                calendarRendered = true;
+            if (target === "calendar-tab" && calendarRendered && calendar) {
+                setTimeout(() => {
+                    try {
+                        calendar.updateSize();
+                    } catch (err) {
+                        console.warn("calendar.updateSize failed", err);
+                    }
+                }, 50);
             }
         });
     });
 
+    if (typeof FullCalendar === "undefined") {
+        console.error("FullCalendar is undefined at DOMContentLoaded. Ensure this script loads AFTER FullCalendar, e.g. include FullCalendar <script> before dashboard.js in the template");
+    }
 });
