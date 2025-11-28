@@ -477,3 +477,70 @@ input:-webkit-autofill:active {
   right: auto;
   color: #602361;
 }
+
+/* ================================
+   CALENDAR TAB
+====================================*/
+/*event background */
+.fc .fc-event {
+    background-color: #AB4242 !important;
+    border-color: #AB4242 !important;
+    color: white !important;
+    text-align: center;
+}
+/* Highlight for today's date */
+.fc .fc-day-today {
+    background-color: #AA84AB !important;   /* lilac opaque */
+    border: none !important;
+    opacity: 0.4 !important;
+}
+/* Month header */
+.fc-toolbar-title {
+    color: #444 !important;
+    font-weight: 600;
+    text-align: right !important;
+}
+/* Hovering over a day cell */
+.fc-daygrid-day:hover {
+    background-color: #B19E84 !important;
+    opacity:0.4;
+}
+/* Selected range (when dragging) */
+.fc-highlight {
+    background: rgba(255, 150, 170, 0.4) !important;
+}
+/* Whole calendar background */
+#calendar {
+    background-color: #C0AE95;
+    border-radius: 12px;
+    border-color:#444;
+    padding: 10px;
+    flex: 0 0 70%;
+}
+.fc .fc-daygrid-day,
+.fc .fc-scrollgrid,
+.fc .fc-scrollgrid td,
+.fc .fc-scrollgrid th {
+    border-color: #5F5240 !important; /* your new grid color */
+}
+.fc .fc-col-header-cell {
+    background-color: #B19E84 !important;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 0;
+}
+.calendar-wrapper {
+    flex: 0 0 70%;
+}
+
+#day-info-panel{
+    flex: 0 0 30%;
+    display: none; /* start hidden */
+    background-color: #D2C2AB;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+#day-info-panel.visible {
+    display: block;
+}
