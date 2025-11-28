@@ -57,6 +57,7 @@
                     <h2 class="large-text">{{ cycle_pred.main_text }}</h2>
                     <p class="smallest-text">{{ cycle_pred.secondary_text }}</p>
 
+                    <!--for future day/night mode (IN DEVELOPMENT)-->
                     <div class="sun-moon-container">
                         <div class="sun">
                             <img src="{{ url_for('static', filename='assets/Centre.png') }}" alt="Sun Center" class="sun-center">
@@ -73,7 +74,11 @@
             <div id="my-cycle-tab" class="tab-content">
                 <div class="open-tab-container">
                     <div class="open-tab-inner">
-                        <p>My Cycle content goes here.</p>
+                        <h3>My Cycle</h3>
+                        <h4>IN DEVELOPMENT</h4>
+                        <h5>Future Developments:</h5>
+                            <ul>Graph showing period phase (e.g. luteal)</ul>
+                            <ul>Showing stats (average cycle lengths, if current cycle is late or irregular, etc)</ul>
                     </div>
                 </div>
             </div>
@@ -84,6 +89,22 @@
                     <div class="open-tab-inner">
 
                         <h3>Calendar</h3>
+                        <h4>IN DEVELOPMENT</h4>
+                        <h5>Here's what it can do so far: </h5>
+                        <ul>
+                            <li>View logged periods</li>
+                            <li>Select specific dates with options to edit/delete/create, depending on what's already logged</li>
+                            <li>Drag period object UI (doesn't save)</li>
+                        </ul>
+                        <h5>In Development/Future Developments:</h5>
+                        <ul>
+                            <li>Log a new period (DB)</li>
+                            <li>Edit logged period dates by dragging the visible object (DB)</li>
+                            <li>Delete a logged period (DB)</li>
+                            <li>Show ovulation and fertile days</li>
+                            <li>Add custom note section and eventually symptoms (light-heavy flow, discharge symptoms, birth control, sexual activity)</li>
+                            <li>Finish css styling for day-info-panel</li>
+                        </ul>
                         <div id="calendar-wrapper">
                             <!--calendar container-->
                             <div id="calendar">
@@ -161,6 +182,10 @@
 
                     <div class="open-tab-inner">
                         <h3>Cycle Settings</h3>
+                        <h5>Future Developments:</h5>
+                            <ul>Cycle length changes if period length does (period_length++ --> cycle_length++)</ul>
+                            <ul>Only can edit period and cycle lengths if cycle is irregular</ul>
+
                         <form method="POST" action="{{ url_for('main.update_cycle_settings') }}">
                             {{ update_cycle_settings_form.hidden_tag() }}
 
